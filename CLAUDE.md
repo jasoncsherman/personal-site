@@ -17,7 +17,9 @@ Jason's personal website — a content-first "living archive" / personal signal 
 - GitHub: _TBD (added at first push)_
 - Project plan: `PLAN.md` (in this folder)
 - Design brief: `personal-site-design-brief.md` (in this folder)
-- Content collections: `src/content/` (one folder per section)
+- **How to add content: `HOW-TO-ADD-CONTENT.md`** (front-matter reference + a copy-paste spec for the blog-writing agent)
+- Font decisions: `FONTS.md`
+- Content collections: `src/content/` (one folder per section); schemas in `src/content.config.ts`
 - Dev reference docs: ~/Documents/obsidian-vault/Dev Reference/
 
 ## Information architecture (sections)
