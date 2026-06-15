@@ -1,0 +1,145 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/PageHeader.astro";
+
+const projects = (await getCollection("projects")).sort(
+	(a, b) => a.data.order - b.data.order
+);
+const fmt = (d?: Date) =>
+	d ? d.toLocaleDateString("en-US", { year: "numeric", month: "short" }) : undefined;
+const accentStatus = new Set(["active", "shipped"]);
+---
+
+<Layout title="Projects — Jason Sherman" description="Personal systems, experiments, and works in progress.">
+	<PageHeader
+		kicker="Projects"
+		title="Projects"
+		intro="Personal systems and experiments — some active, some exploratory, some paused. Not all technical, and that's fine."
+	/>
+
+	<div class="container container--wide">
+		<div class="projects">
+			{
+				projects.map((p) => (
+					<article class="project">
+						<div class="project-head">
+							<h2 class="project-title">{p.data.title}</h2>
+							<span
+								class:list={[
+									"tag",
+									{ "tag--accent": accentStatus.has(p.data.status) },
+									{ "tag--outline": !accentStatus.has(p.data.status) },
+								]}
+							>
+								{p.data.status}
+							</span>
+						</div>
+						{p.body && p.body.trim() && <p class="project-desc">{p.body.trim()}</p>}
+						<dl class="meta-table">
+							{p.data.kind && (
+								<div>
+									<dt>Kind</dt>
+									<dd>{p.data.kind}</dd>
+								</div>
+							)}
+							{fmt(p.data.started) && (
+								<div>
+									<dt>Started</dt>
+									<dd>{fmt(p.data.started)}</dd>
+								</div>
+							)}
+							{p.data.motivation && (
+								<div>
+									<dt>Why</dt>
+									<dd>{p.data.motivation}</dd>
+								</div>
+							)}
+							{p.data.currentQuestion && (
+								<div>
+									<dt>Current question</dt>
+									<dd>{p.data.currentQuestion}</dd>
+								</div>
+							)}
+							{p.data.nextStep && (
+								<div>
+									<dt>Next step</dt>
+									<dd>{p.data.nextStep}</dd>
+								</div>
+							)}
+						</dl>
+					</article>
+				))
+			}
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.projects {
+		margin-top: 48px;
+		display: flex;
+		flex-direction: column;
+		gap: 22px;
+	}
+	.project {
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		background: var(--surface);
+		padding: 28px;
+	}
+	.project-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 16px;
+		margin-bottom: 10px;
+	}
+	.project-title {
+		font-size: 28px;
+	}
+	.project-desc {
+		font-size: 15.5px;
+		line-height: 1.6;
+		color: var(--text-2);
+		margin-bottom: 18px;
+		max-width: 60ch;
+	}
+	.meta-table {
+		margin: 0;
+		display: grid;
+		gap: 0;
+	}
+	.meta-table > div {
+		display: flex;
+		gap: 18px;
+		padding: 10px 0;
+		border-top: 1px solid var(--border);
+	}
+	.meta-table dt {
+		font-family: var(--font-mono);
+		font-size: 11.5px;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--muted);
+		flex: none;
+		width: 140px;
+		margin: 0;
+	}
+	.meta-table dd {
+		margin: 0;
+		font-size: 14.5px;
+		color: var(--text);
+		line-height: 1.45;
+	}
+
+	@media (max-width: 560px) {
+		.meta-table > div {
+			flex-direction: column;
+			gap: 2px;
+		}
+		.meta-table dt {
+			width: auto;
+		}
+	}
+</style>

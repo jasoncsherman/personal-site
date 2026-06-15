@@ -1,0 +1,98 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import PageHeader from "../../components/PageHeader.astro";
+
+const entries = (await getCollection("writing")).sort(
+	(a, b) => b.data.published.valueOf() - a.data.published.valueOf()
+);
+const fmt = (d: Date) =>
+	d.toLocaleDateString("en-US", { year: "numeric", month: "short" });
+---
+
+<Layout title="Writing — Jason Sherman" description="Notes, essays, reflections, and field notes.">
+	<PageHeader
+		kicker="Writing"
+		title="Writing"
+		intro="Notes, reflections, and field notes — things I'm figuring out, published while they're still forming."
+	/>
+
+	<div class="container container--wide">
+		<ul class="entries">
+			{
+				entries.map((e) => (
+					<li class="entry">
+						<a href={`/writing/${e.id}/`} class="entry-link">
+							<div class="entry-main">
+								<h2 class="ui-title entry-title">{e.data.title}</h2>
+								{e.data.excerpt && <p class="entry-excerpt">{e.data.excerpt}</p>}
+							</div>
+							<p class="entry-meta meta">
+								{e.data.type}
+								{e.data.topic && ` · ${e.data.topic}`}
+								{` · ${fmt(e.data.published)}`}
+								{e.data.status === "draft" && " · Draft"}
+							</p>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</Layout>
+
+<style>
+	.entries {
+		list-style: none;
+		margin: 48px 0 0;
+		padding: 0;
+	}
+	.entry {
+		border-top: 1px solid var(--border);
+	}
+	.entry:last-child {
+		border-bottom: 1px solid var(--border);
+	}
+	.entry-link {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 24px;
+		padding: 22px 0;
+		transition: padding-left 0.15s ease;
+	}
+	.entry-link:hover {
+		padding-left: 8px;
+	}
+	.entry-main {
+		min-width: 0;
+	}
+	.entry-title {
+		font-size: 22px;
+		margin-bottom: 6px;
+		transition: color 0.15s;
+	}
+	.entry-link:hover .entry-title {
+		color: var(--accent);
+	}
+	.entry-excerpt {
+		font-size: 15px;
+		line-height: 1.5;
+		color: var(--text-2);
+		max-width: 56ch;
+	}
+	.entry-meta {
+		white-space: nowrap;
+		flex: none;
+	}
+
+	@media (max-width: 600px) {
+		.entry-link {
+			flex-direction: column;
+			gap: 8px;
+		}
+		.entry-meta {
+			white-space: normal;
+		}
+	}
+</style>

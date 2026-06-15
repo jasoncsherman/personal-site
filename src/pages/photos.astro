@@ -1,0 +1,72 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/PageHeader.astro";
+
+const albums = await getCollection("photos");
+---
+
+<Layout title="Photos — Jason Sherman" description="A personal collection — albums of places, light, and ordinary moments.">
+	<PageHeader
+		kicker="Photos"
+		title="Photos"
+		intro="A personal collection, not a portfolio. Albums of places, light, and ordinary moments — kept for why they matter, not just where they're from."
+	/>
+
+	<div class="container container--wide">
+		<div class="albums">
+			{
+				albums.map((a) => (
+					<article class="album">
+						<div class="album-img" aria-hidden="true" />
+						<div class="album-body">
+							<h2 class="album-title">{a.data.title}</h2>
+							{a.data.whyItMatters && <p class="album-why">{a.data.whyItMatters}</p>}
+							<p class="album-meta meta">
+								{[a.data.theme, a.data.place, a.data.dateOrSeason, a.data.mood]
+									.filter(Boolean)
+									.join(" · ")}
+							</p>
+						</div>
+					</article>
+				))
+			}
+		</div>
+		<p class="placeholder-note meta">Image albums are placeholders for now — real photos drop in here.</p>
+	</div>
+</Layout>
+
+<style>
+	.albums {
+		margin-top: 48px;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: 36px 28px;
+	}
+	.album-img {
+		aspect-ratio: 4 / 3;
+		border-radius: 8px;
+		border: 1px solid var(--border);
+		background:
+			radial-gradient(120% 90% at 20% 10%, var(--accent-soft), transparent 60%),
+			linear-gradient(160deg, var(--surface-2), var(--surface));
+	}
+	.album-body {
+		margin-top: 16px;
+	}
+	.album-title {
+		font-size: 24px;
+		margin-bottom: 8px;
+	}
+	.album-why {
+		font-size: 15px;
+		line-height: 1.5;
+		color: var(--text-2);
+		margin-bottom: 10px;
+	}
+	.placeholder-note {
+		margin-top: 48px;
+		padding-top: 20px;
+		border-top: 1px solid var(--border);
+	}
+</style>

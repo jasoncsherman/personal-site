@@ -2,6 +2,8 @@
 dist/
 # generated types
 .astro/
+# build-time API cache (Open Library)
+.cache/
 
 # dependencies
 node_modules/

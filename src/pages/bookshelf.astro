@@ -1,0 +1,253 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import { getBooksMeta } from "../lib/openlibrary";
+
+const entries = await getCollection("bookshelf");
+const isbns = entries.map((e) => e.data.isbn).filter((x): x is string => Boolean(x));
+const meta = await getBooksMeta(isbns);
+
+const books = entries.map((e) => {
+	const m = e.data.isbn ? meta[e.data.isbn] ?? {} : {};
+	return {
+		id: e.id,
+		status: e.data.status,
+		started: e.data.started,
+		finished: e.data.finished,
+		rating: e.data.rating,
+		note: e.body?.trim() || "",
+		title: e.data.title || m.title || "Untitled",
+		author: e.data.author || m.author || "",
+		year: m.year,
+		pages: m.pages,
+		coverUrl: m.coverUrl,
+	};
+});
+
+type Book = (typeof books)[number];
+
+const reading = books.filter((b) => b.status === "reading");
+const tbr = books.filter((b) => b.status === "tbr");
+const read = books
+	.filter((b) => b.status === "read")
+	.sort((a, b) => (b.finished?.valueOf() ?? 0) - (a.finished?.valueOf() ?? 0));
+const setAside = books.filter((b) => b.status === "abandoned");
+
+const fmtMonth = (d?: Date) =>
+	d ? d.toLocaleDateString("en-US", { year: "numeric", month: "short" }) : undefined;
+
+const detailLine = (b: Book) =>
+	[b.author, b.year, b.pages ? `${b.pages} pp` : undefined].filter(Boolean).join(" · ");
+---
+
+<Layout title="Bookshelf — Jason Sherman" description="What I'm reading, have read, and mean to read.">
+	<PageHeader
+		kicker="Bookshelf"
+		title="What I'm reading"
+		intro="A living shelf. Covers and details come from Open Library; the notes on why a book mattered are mine."
+	/>
+
+	<div class="container container--wide">
+		{
+			reading.length > 0 && (
+				<section class="shelf">
+					<div class="shelf-head">
+						<h2>Currently reading</h2>
+						<span class="meta">{reading.length}</span>
+					</div>
+					<ul class="books">
+						{reading.map((b) => (
+							<li class="book">
+								{b.coverUrl ? (
+									<img src={b.coverUrl} alt={`Cover of ${b.title}`} class="cover" loading="lazy" />
+								) : (
+									<span class="cover cover--ph" aria-hidden="true" />
+								)}
+								<div class="book-main">
+									<h3 class="ui-title book-title">{b.title}</h3>
+									<p class="book-detail meta">{detailLine(b)}</p>
+									{b.note && <p class="book-why">{b.note}</p>}
+								</div>
+								<span class="tag tag--accent">Reading</span>
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
+
+		{
+			tbr.length > 0 && (
+				<section class="shelf">
+					<div class="shelf-head">
+						<h2>To be read</h2>
+						<span class="meta">{tbr.length}</span>
+					</div>
+					<ul class="books">
+						{tbr.map((b) => (
+							<li class="book">
+								{b.coverUrl ? (
+									<img src={b.coverUrl} alt={`Cover of ${b.title}`} class="cover" loading="lazy" />
+								) : (
+									<span class="cover cover--ph" aria-hidden="true" />
+								)}
+								<div class="book-main">
+									<h3 class="ui-title book-title">{b.title}</h3>
+									<p class="book-detail meta">{detailLine(b)}</p>
+									{b.note && <p class="book-why">{b.note}</p>}
+								</div>
+								<span class="tag tag--outline">TBR</span>
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
+
+		{
+			read.length > 0 && (
+				<section class="shelf">
+					<div class="shelf-head">
+						<h2>Read</h2>
+						<span class="meta">most recent first</span>
+					</div>
+					<ul class="books">
+						{read.map((b) => (
+							<li class="book">
+								{b.coverUrl ? (
+									<img src={b.coverUrl} alt={`Cover of ${b.title}`} class="cover" loading="lazy" />
+								) : (
+									<span class="cover cover--ph" aria-hidden="true" />
+								)}
+								<div class="book-main">
+									<h3 class="ui-title book-title">{b.title}</h3>
+									<p class="book-detail meta">{detailLine(b)}</p>
+									{b.note && <p class="book-why">{b.note}</p>}
+								</div>
+								<div class="book-side">
+									{b.rating && (
+										<span class="rating" aria-label={`${b.rating} out of 5`}>{"★".repeat(b.rating)}</span>
+									)}
+									{fmtMonth(b.finished) && <span class="meta finished">{fmtMonth(b.finished)}</span>}
+								</div>
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
+
+		{
+			setAside.length > 0 && (
+				<section class="shelf">
+					<div class="shelf-head">
+						<h2>Set aside</h2>
+						<span class="meta">{setAside.length}</span>
+					</div>
+					<ul class="books">
+						{setAside.map((b) => (
+							<li class="book">
+								{b.coverUrl ? (
+									<img src={b.coverUrl} alt={`Cover of ${b.title}`} class="cover" loading="lazy" />
+								) : (
+									<span class="cover cover--ph" aria-hidden="true" />
+								)}
+								<div class="book-main">
+									<h3 class="ui-title book-title">{b.title}</h3>
+									<p class="book-detail meta">{detailLine(b)}</p>
+									{b.note && <p class="book-why">{b.note}</p>}
+								</div>
+								<span class="tag">Set aside</span>
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
+	</div>
+</Layout>
+
+<style>
+	.shelf {
+		margin-top: 64px;
+	}
+	.shelf-head {
+		display: flex;
+		align-items: baseline;
+		gap: 12px;
+		margin-bottom: 8px;
+	}
+	.shelf-head h2 {
+		font-size: 32px;
+	}
+	.books {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.book {
+		display: flex;
+		align-items: flex-start;
+		gap: 20px;
+		padding: 20px 0;
+		border-top: 1px solid var(--border);
+	}
+	.book:last-child {
+		border-bottom: 1px solid var(--border);
+	}
+	.cover {
+		flex: none;
+		width: 56px;
+		height: auto;
+		border-radius: 3px;
+		border: 1px solid var(--border);
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+	}
+	.cover--ph {
+		height: 82px;
+		background: linear-gradient(150deg, var(--surface-2), var(--accent-soft));
+	}
+	.book-main {
+		flex: 1;
+		min-width: 0;
+	}
+	.book-title {
+		font-size: 19px;
+		margin-bottom: 4px;
+	}
+	.book-detail {
+		margin-bottom: 8px;
+	}
+	.book-why {
+		font-size: 14.5px;
+		line-height: 1.5;
+		color: var(--muted);
+		font-style: italic;
+		max-width: 60ch;
+	}
+	.book-side {
+		flex: none;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 6px;
+	}
+	.rating {
+		color: var(--accent);
+		letter-spacing: 0.1em;
+		font-size: 13px;
+	}
+
+	@media (max-width: 560px) {
+		.book {
+			flex-wrap: wrap;
+		}
+		.book-side {
+			flex-direction: row;
+			align-items: center;
+			width: 100%;
+			gap: 14px;
+		}
+	}
+</style>

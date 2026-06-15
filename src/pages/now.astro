@@ -1,0 +1,72 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/PageHeader.astro";
+
+// A lightweight snapshot of present attention. Edit these lines whenever it changes.
+const updated = "June 2026";
+const items = [
+	{ label: "Focus", text: "Building this website and learning Astro." },
+	{ label: "Learning", text: "Static site generation, content collections, and design systems." },
+	{ label: "Building", text: "A daily logging practice and a few small personal tools." },
+	{ label: "Reading", text: "The Master and Margarita — Mikhail Bulgakov." },
+	{ label: "Exploring", text: "How AI changes the way I learn and make things." },
+	{ label: "Open to", text: "Conversations about AI, learning systems, and careful making." },
+];
+---
+
+<Layout title="Now — Jason Sherman" description="What has my attention right now.">
+	<PageHeader kicker="Now" title="Now" intro="A snapshot of what has my attention at the moment. Updated when it changes." />
+
+	<div class="container container--wide">
+		<dl class="now-list">
+			{
+				items.map((it) => (
+					<div class="now-row">
+						<dt class="now-label meta">{it.label}</dt>
+						<dd class="now-text">{it.text}</dd>
+					</div>
+				))
+			}
+		</dl>
+		<p class="updated meta">Last updated · {updated}</p>
+	</div>
+</Layout>
+
+<style>
+	.now-list {
+		margin: 48px 0 0;
+	}
+	.now-row {
+		display: flex;
+		gap: 28px;
+		align-items: baseline;
+		padding: 20px 0;
+		border-top: 1px solid var(--border);
+	}
+	.now-row:last-of-type {
+		border-bottom: 1px solid var(--border);
+	}
+	.now-label {
+		flex: none;
+		width: 120px;
+		color: var(--accent);
+		padding-top: 2px;
+	}
+	.now-text {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: clamp(20px, 3vw, 26px);
+		line-height: 1.3;
+		color: var(--text);
+	}
+	.updated {
+		margin-top: 32px;
+	}
+
+	@media (max-width: 560px) {
+		.now-row {
+			flex-direction: column;
+			gap: 6px;
+		}
+	}
+</style>

@@ -1,0 +1,86 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/PageHeader.astro";
+
+const notes = (await getCollection("fieldNotes")).sort(
+	(a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const fmt = (d: Date) =>
+	d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+---
+
+<Layout
+	title="Field Notes — Jason Sherman"
+	description="A reflective log of building my AI skill set — what I tried, what worked, how my thinking changed."
+>
+	<PageHeader
+		kicker="Field Notes"
+		title="Field Notes"
+		intro="A running, reflective log of learning to build with AI — what I tried, what worked, what didn't, and how my thinking is changing. Human notes, not documentation."
+	/>
+
+	<div class="container container--wide">
+		<div class="notes">
+			{
+				notes.map((n) => (
+					<article class="note">
+						<p class="note-meta meta">
+							{fmt(n.data.date)}
+							{n.data.tool && ` · ${n.data.tool}`}
+							{` · ${n.data.mode}`}
+						</p>
+						<h2 class="note-title">{n.data.title}</h2>
+						{n.body && n.body.trim() && <p class="note-body">{n.body.trim()}</p>}
+						{n.data.keyLesson && (
+							<p class="note-lesson">
+								<span class="lesson-key">Lesson</span>
+								{n.data.keyLesson}
+							</p>
+						)}
+					</article>
+				))
+			}
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.notes {
+		margin-top: 48px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.note {
+		border-left: 2px solid var(--accent);
+		padding: 22px 0 22px 22px;
+		border-top: 1px solid var(--border);
+	}
+	.note:first-child {
+		border-top: none;
+	}
+	.note-title {
+		font-size: 26px;
+		margin: 10px 0 10px;
+	}
+	.note-body {
+		font-size: 15.5px;
+		line-height: 1.6;
+		color: var(--text-2);
+		max-width: 62ch;
+	}
+	.note-lesson {
+		margin-top: 14px;
+		font-size: 14.5px;
+		color: var(--text);
+	}
+	.lesson-key {
+		font-family: var(--font-mono);
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--accent);
+		margin-right: 10px;
+	}
+</style>
