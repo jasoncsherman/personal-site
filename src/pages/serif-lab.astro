@@ -1,0 +1,322 @@
+---
+// Serif lab — Cool archive, dark. Four serif heading options, each shown
+// PAIRED WITH MONO metadata/nav so Jason can judge the serif+mono combination.
+// Body stays Inter. This is the final type step before locking the system.
+
+interface Option {
+	font: string;
+	name: string;
+	kind: string;
+	rec?: boolean;
+}
+
+const options: Option[] = [
+	{ font: "'Spectral', Georgia, serif", name: "Spectral", kind: "Refined modern serif · the current pick", rec: true },
+	{ font: "'Instrument Serif', Georgia, serif", name: "Instrument Serif", kind: "High-contrast display serif · artsy, very modern editorial", rec: true },
+	{ font: "'Source Serif 4', Georgia, serif", name: "Source Serif 4", kind: "Clean contemporary serif · modern and highly readable" },
+	{ font: "'Fraunces', Georgia, serif", name: "Fraunces", kind: "Characterful old-style · warmer, more personality (on dark now)" },
+];
+
+const navItems = ["Home", "Writing", "Photos", "AI Log", "Bookshelf", "Projects", "Now", "About"];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="noindex" />
+		<title>Serif Lab — Serif + Mono</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Spectral:wght@400;500;600&display=swap"
+		/>
+	</head>
+	<body>
+		<main>
+			<header class="head">
+				<p class="kicker">Cool archive · serif + mono</p>
+				<h1>Pick a serif</h1>
+				<p class="lede">
+					The system: <strong>serif headings · Inter body · mono metadata</strong>. Each card pairs the
+					serif with the mono (nav, tags, the <span class="inline-meta">DATE · TOPIC</span> lines) so you
+					can judge the <em>combination</em>, not just the serif. The two I'd lean toward are marked
+					<span class="rec-chip">my pick</span>. After this we lock it and build.
+				</p>
+			</header>
+
+			<div class="grid">
+				{
+					options.map((o) => (
+						<article class="opt" style={`--font-display:${o.font}`}>
+							<div class="opt-head">
+								<span class="opt-name">{o.name}</span>
+								<span class="opt-kind">{o.kind}</span>
+								{o.rec && <span class="rec-chip">my pick</span>}
+							</div>
+
+							{/* brand + mono nav: the pairing in a real header */}
+							<div class="brandrow">
+								<span class="brand">Jason Sherman</span>
+								<nav class="mininav" aria-label={`${o.name} sample nav`}>
+									{navItems.map((it, i) => (
+										<a href="#" class={i === 0 ? "current" : ""}>
+											{it}
+										</a>
+									))}
+								</nav>
+							</div>
+
+							<h2 class="spec">A living archive of what I’m learning, noticing, and making.</h2>
+							<p class="meta">FIELD NOTE · LEARNING · 4 MIN READ · DRAFT</p>
+
+							<p class="body">
+								Body text stays in Inter so prose reads calm and modern. The serif carries the titles
+								and the editorial voice; the mono carries dates, tags, and labels — editorial warmth
+								meeting technical precision.
+							</p>
+
+							<div class="book">
+								<span class="cover" aria-hidden="true" />
+								<div class="book-main">
+									<h3 class="book-title">The Master and Margarita</h3>
+									<p class="book-sub">Mikhail Bulgakov</p>
+								</div>
+								<span class="tag">Reading</span>
+							</div>
+						</article>
+					))
+				}
+			</div>
+
+			<footer class="foot">
+				<p>Serif lab · sample content for layout only · not indexed</p>
+			</footer>
+		</main>
+
+		<style>
+			:root {
+				--bg: #0d0f13;
+				--surface: #161b22;
+				--surface-2: #20262f;
+				--text: #e8e4da;
+				--text-2: #a6acb6;
+				--muted: #6b7280;
+				--border: #333b47;
+				--accent: #d2a35a;
+				--accent-soft: #332b1c;
+				--accent-ink: #0d0f13;
+				--font-body: "Inter", system-ui, sans-serif;
+				--font-mono: "JetBrains Mono", ui-monospace, monospace;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0;
+				background: var(--bg);
+				color: var(--text);
+				font-family: var(--font-body);
+				-webkit-font-smoothing: antialiased;
+			}
+			main {
+				max-width: 920px;
+				margin: 0 auto;
+				padding: 64px 24px 80px;
+			}
+
+			.kicker {
+				font-family: var(--font-mono);
+				font-size: 12px;
+				letter-spacing: 0.12em;
+				text-transform: uppercase;
+				color: var(--accent);
+				margin: 0 0 12px;
+			}
+			.head h1 {
+				font-family: "Spectral", Georgia, serif;
+				font-weight: 600;
+				font-size: clamp(32px, 6vw, 48px);
+				line-height: 1.05;
+				margin: 0 0 16px;
+			}
+			.lede {
+				font-size: 17px;
+				line-height: 1.6;
+				color: var(--text-2);
+				max-width: 66ch;
+				margin: 0;
+			}
+			.lede strong {
+				color: var(--text);
+			}
+			.lede em {
+				color: var(--text);
+				font-style: italic;
+			}
+			.inline-meta {
+				font-family: var(--font-mono);
+				font-size: 13px;
+				color: var(--accent);
+			}
+			.rec-chip {
+				display: inline-block;
+				font-family: var(--font-mono);
+				font-size: 10.5px;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				color: var(--accent);
+				border: 1px solid var(--accent);
+				border-radius: 999px;
+				padding: 2px 8px;
+				vertical-align: middle;
+			}
+
+			.grid {
+				margin-top: 40px;
+				display: grid;
+				gap: 22px;
+			}
+			.opt {
+				background: var(--surface);
+				border: 1px solid var(--border);
+				border-radius: 12px;
+				padding: 28px;
+			}
+			.opt-head {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				flex-wrap: wrap;
+				padding-bottom: 18px;
+				margin-bottom: 22px;
+				border-bottom: 1px solid var(--border);
+			}
+			.opt-name {
+				font-family: var(--font-mono);
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--text);
+				letter-spacing: 0.02em;
+			}
+			.opt-kind {
+				font-size: 13px;
+				color: var(--muted);
+			}
+
+			.brandrow {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				gap: 18px;
+				flex-wrap: wrap;
+				padding-bottom: 22px;
+				margin-bottom: 22px;
+				border-bottom: 1px solid var(--border);
+			}
+			.brand {
+				font-family: var(--font-display);
+				font-weight: 600;
+				font-size: 19px;
+				color: var(--text);
+			}
+			.mininav {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 14px;
+			}
+			.mininav a {
+				font-family: var(--font-mono);
+				font-size: 12px;
+				color: var(--text-2);
+				text-decoration: none;
+				padding: 2px 0;
+				border-bottom: 1.5px solid transparent;
+			}
+			.mininav a.current {
+				color: var(--accent);
+				border-color: var(--accent);
+			}
+
+			.spec {
+				font-family: var(--font-display);
+				font-weight: 600;
+				font-size: clamp(26px, 4vw, 38px);
+				line-height: 1.12;
+				margin: 0 0 12px;
+				color: var(--text);
+			}
+			.meta {
+				font-family: var(--font-mono);
+				font-size: 12px;
+				letter-spacing: 0.08em;
+				color: var(--muted);
+				margin: 0 0 22px;
+			}
+			.body {
+				font-size: 15.5px;
+				line-height: 1.6;
+				color: var(--text-2);
+				max-width: 62ch;
+				margin: 0 0 24px;
+			}
+
+			.book {
+				display: flex;
+				align-items: center;
+				gap: 14px;
+				padding-top: 22px;
+				border-top: 1px solid var(--border);
+			}
+			.cover {
+				flex: none;
+				width: 38px;
+				height: 54px;
+				border-radius: 3px;
+				background: linear-gradient(150deg, var(--surface-2), var(--accent-soft));
+				border: 1px solid var(--border);
+			}
+			.book-main {
+				flex: 1;
+			}
+			.book-title {
+				font-family: var(--font-display);
+				font-weight: 500;
+				font-size: 17px;
+				margin: 0 0 2px;
+				color: var(--text);
+			}
+			.book-sub {
+				margin: 0;
+				font-size: 13.5px;
+				color: var(--text-2);
+			}
+			.tag {
+				font-family: var(--font-mono);
+				font-size: 11.5px;
+				letter-spacing: 0.04em;
+				padding: 4px 10px;
+				border-radius: 4px;
+				background: var(--accent);
+				color: var(--accent-ink);
+			}
+
+			.foot {
+				margin-top: 44px;
+				font-family: var(--font-mono);
+				font-size: 12px;
+				color: var(--muted);
+			}
+
+			a:focus-visible {
+				outline: 2px solid var(--accent);
+				outline-offset: 3px;
+				border-radius: 2px;
+			}
+		</style>
+	</body>
+</html>

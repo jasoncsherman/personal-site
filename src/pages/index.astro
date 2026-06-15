@@ -1,17 +1,269 @@
 ---
+import Layout from "../layouts/Layout.astro";
 
+// NOTE: placeholder/sample content for layout — real content comes from
+// content collections as the section pages are built. No fabricated bio.
+const reading = [
+	{ title: "The Master and Margarita", author: "Mikhail Bulgakov", status: "Reading" },
+	{ title: "Thinking in Systems", author: "Donella Meadows", status: "Read" },
+];
+const writing = [
+	{ title: "Notes on learning in public", meta: "Note · Learning · 4 min", href: "/writing" },
+	{ title: "The tools that earn their keep", meta: "Field note · Systems · 2 min", href: "/writing" },
+];
+const projects = [
+	{ title: "This website", status: "Active", note: "A content-first living archive, built in the open." },
+	{ title: "Daily logging system", status: "Exploring", note: "A small practice for paying attention on purpose." },
+];
+const aiLog = {
+	meta: "2026·06·15 · Astro · Experiment",
+	title: "Trying content collections",
+	note: "Moved the bookshelf to typed Markdown. A bad value now fails the build loudly instead of silently breaking a page.",
+};
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+	<section class="hero container container--wide">
+		<p class="kicker">Personal archive · est. 2026</p>
+		<h1 class="hero-statement">A living archive of what I’m learning, noticing, reading, and making.</h1>
+		<p class="hero-intro">
+			I’m Jason — exploring how AI, taste, and systems help people think and make better things. This
+			is where I keep the work, the notes, and the things catching my eye, while they’re still forming.
+		</p>
+		<div class="focus">
+			<span class="meta focus-label">Currently</span>
+			<p class="focus-text">Building this site, learning Astro, and keeping a daily logging practice.</p>
+		</div>
+	</section>
+
+	<div class="container container--wide">
+		{/* Reading now */}
+		<section class="block">
+			<div class="block-head">
+				<h2>Reading now</h2>
+				<a href="/bookshelf" class="see-all">Bookshelf →</a>
+			</div>
+			<ul class="list">
+				{
+					reading.map((b) => (
+						<li class="row">
+							<div class="row-main">
+								<h3 class="ui-title row-title">{b.title}</h3>
+								<p class="row-sub">{b.author}</p>
+							</div>
+							<span class:list={["tag", { "tag--accent": b.status === "Reading" }]}>{b.status}</span>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+
+		{/* Recent writing */}
+		<section class="block">
+			<div class="block-head">
+				<h2>Recent writing</h2>
+				<a href="/writing" class="see-all">Writing →</a>
+			</div>
+			<ul class="list">
+				{
+					writing.map((w) => (
+						<li class="row">
+							<div class="row-main">
+								<a href={w.href}>
+									<h3 class="ui-title row-title link">{w.title}</h3>
+								</a>
+							</div>
+							<span class="meta row-meta">{w.meta}</span>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+
+		{/* Building */}
+		<section class="block">
+			<div class="block-head">
+				<h2>Building</h2>
+				<a href="/projects" class="see-all">Projects →</a>
+			</div>
+			<ul class="list">
+				{
+					projects.map((p) => (
+						<li class="row">
+							<div class="row-main">
+								<h3 class="ui-title row-title">{p.title}</h3>
+								<p class="row-sub">{p.note}</p>
+							</div>
+							<span class:list={["tag", { "tag--accent": p.status === "Active" }, { "tag--outline": p.status !== "Active" }]}>
+								{p.status}
+							</span>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+
+		{/* Field notes */}
+		<section class="block">
+			<div class="block-head">
+				<h2>Field notes</h2>
+				<a href="/field-notes" class="see-all">Field Notes →</a>
+			</div>
+			<article class="log">
+				<p class="meta">{aiLog.meta}</p>
+				<h3 class="log-title">{aiLog.title}</h3>
+				<p class="row-sub">{aiLog.note}</p>
+			</article>
+		</section>
+
+		{/* Invitation */}
+		<section class="invite">
+			<p class="invite-line">Open to conversations about AI, learning systems, and making things carefully.</p>
+			<div class="invite-links">
+				<a href="/about">About &amp; collaborate →</a>
+			</div>
+		</section>
+	</div>
+</Layout>
+
+<style>
+	.hero {
+		padding-top: 72px;
+		padding-bottom: 24px;
+	}
+	.hero-statement {
+		font-size: clamp(40px, 8vw, 72px);
+		line-height: 1.02;
+		margin: 16px 0 28px;
+	}
+	.hero-intro {
+		font-size: 18px;
+		line-height: 1.6;
+		color: var(--text-2);
+		max-width: 60ch;
+	}
+	.focus {
+		display: flex;
+		gap: 14px;
+		align-items: baseline;
+		margin-top: 32px;
+		padding-top: 20px;
+		border-top: 1px solid var(--border);
+	}
+	.focus-label {
+		flex: none;
+		color: var(--accent);
+		padding-top: 2px;
+	}
+	.focus-text {
+		font-size: 16px;
+		color: var(--text);
+	}
+
+	.block {
+		margin-top: 92px;
+	}
+	.block-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 16px;
+		margin-bottom: 10px;
+	}
+	.block-head h2 {
+		font-size: 38px;
+	}
+	.see-all {
+		font-family: var(--font-mono);
+		font-size: 12.5px;
+		color: var(--text-2);
+		white-space: nowrap;
+		transition: color 0.15s;
+	}
+	.see-all:hover {
+		color: var(--accent);
+	}
+
+	.list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 20px;
+		padding: 12px 0;
+		border-top: 1px solid var(--border);
+	}
+	.row:last-child {
+		border-bottom: 1px solid var(--border);
+	}
+	.row-main {
+		min-width: 0;
+	}
+	.row-title {
+		font-size: 18px;
+		margin-bottom: 3px;
+	}
+	.row-title.link {
+		transition: color 0.15s;
+	}
+	a:hover .row-title.link {
+		color: var(--accent);
+	}
+	.row-sub {
+		font-size: 14.5px;
+		line-height: 1.45;
+		color: var(--text-2);
+		max-width: 52ch;
+	}
+	.row-meta {
+		white-space: nowrap;
+	}
+
+	.log {
+		padding: 20px 0 4px;
+		border-top: 1px solid var(--border);
+		border-left: 2px solid var(--accent);
+		padding-left: 18px;
+	}
+	.log-title {
+		font-size: 24px;
+		margin: 8px 0 8px;
+	}
+
+	.invite {
+		margin-top: 96px;
+		padding-top: 36px;
+		border-top: 1px solid var(--border);
+	}
+	.invite-line {
+		font-family: var(--font-display);
+		font-size: clamp(28px, 4.6vw, 46px);
+		line-height: 1.15;
+		color: var(--text);
+	}
+	.invite-links {
+		margin-top: 18px;
+	}
+	.invite-links a {
+		font-family: var(--font-mono);
+		font-size: 13px;
+		color: var(--accent);
+		border-bottom: 1px solid transparent;
+		transition: border-color 0.15s;
+	}
+	.invite-links a:hover {
+		border-color: var(--accent);
+	}
+
+	@media (max-width: 560px) {
+		.row {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 8px;
+		}
+	}
+</style>

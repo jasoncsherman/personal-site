@@ -1,0 +1,230 @@
+---
+// Scale test — Instrument Serif at the real sizes we'll use, on the Cool
+// archive dark palette, to answer: does it hold up small? Includes an Inter
+// comparison for small list titles (the "danger zone").
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="noindex" />
+		<title>Scale Test — Instrument Serif</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
+		/>
+	</head>
+	<body>
+		<main>
+			<p class="kicker">Instrument Serif · scale &amp; usage test</p>
+
+			<section class="card">
+				<p class="tag-line">✅ LARGE — where Instrument Serif sings</p>
+
+				<p class="lbl">Page title · 46px</p>
+				<h1 class="serif s-46">A living archive</h1>
+
+				<p class="lbl">Section header · 30px</p>
+				<h2 class="serif s-30">What I’m reading now</h2>
+
+				<p class="lbl">Brand / name · 20px</p>
+				<p class="serif s-20">Jason Sherman</p>
+
+				<p class="lbl">Italic (it has a lovely one) · 30px</p>
+				<p class="serif s-30 ital">field notes &amp; half-finished things</p>
+			</section>
+
+			<section class="card">
+				<p class="tag-line">⚠️ SMALL — the danger zone (book / list titles ~17px)</p>
+
+				<p class="lbl">Instrument Serif · 18px &amp; 16px</p>
+				<h3 class="serif s-18">The Master and Margarita</h3>
+				<h3 class="serif s-16">Thinking in Systems</h3>
+
+				<p class="lbl divider">— same titles in Inter (the proposed alternative for small) —</p>
+				<h3 class="sans s-18">The Master and Margarita</h3>
+				<h3 class="sans s-16">Thinking in Systems</h3>
+
+				<p class="note">
+					Judge the top pair: do the thin strokes hold up, or look fragile on the dark background?
+					If they feel too delicate, we use the Inter versions for small repeated titles and keep
+					Instrument Serif for the big stuff.
+				</p>
+			</section>
+
+			<section class="card">
+				<p class="tag-line">IN CONTEXT — a real bookshelf row, both ways</p>
+
+				<p class="lbl">Title in Instrument Serif</p>
+				<div class="book">
+					<span class="cover" aria-hidden="true"></span>
+					<div class="book-main">
+						<h3 class="serif s-18">The Master and Margarita</h3>
+						<p class="book-sub">Mikhail Bulgakov</p>
+					</div>
+					<span class="pill">Reading</span>
+				</div>
+
+				<p class="lbl" style="margin-top:22px">Title in Inter</p>
+				<div class="book">
+					<span class="cover" aria-hidden="true"></span>
+					<div class="book-main">
+						<h3 class="sans s-18 w600">The Master and Margarita</h3>
+						<p class="book-sub">Mikhail Bulgakov</p>
+					</div>
+					<span class="pill">Reading</span>
+				</div>
+			</section>
+		</main>
+
+		<style>
+			:root {
+				--bg: #0d0f13;
+				--surface: #161b22;
+				--surface-2: #20262f;
+				--text: #e8e4da;
+				--text-2: #a6acb6;
+				--muted: #6b7280;
+				--border: #333b47;
+				--accent: #d2a35a;
+				--accent-soft: #332b1c;
+				--accent-ink: #0d0f13;
+				--serif: "Instrument Serif", Georgia, serif;
+				--sans: "Inter", system-ui, sans-serif;
+				--mono: "JetBrains Mono", ui-monospace, monospace;
+			}
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0;
+				background: var(--bg);
+				color: var(--text);
+				font-family: var(--sans);
+				-webkit-font-smoothing: antialiased;
+			}
+			main {
+				max-width: 720px;
+				margin: 0 auto;
+				padding: 56px 24px 80px;
+				display: flex;
+				flex-direction: column;
+				gap: 22px;
+			}
+			.kicker {
+				font-family: var(--mono);
+				font-size: 12px;
+				letter-spacing: 0.12em;
+				text-transform: uppercase;
+				color: var(--accent);
+				margin: 0 0 6px;
+			}
+			.card {
+				background: var(--surface);
+				border: 1px solid var(--border);
+				border-radius: 12px;
+				padding: 28px;
+			}
+			.tag-line {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				letter-spacing: 0.04em;
+				color: var(--text);
+				margin: 0 0 20px;
+				padding-bottom: 14px;
+				border-bottom: 1px solid var(--border);
+			}
+			.lbl {
+				font-family: var(--mono);
+				font-size: 11px;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				color: var(--muted);
+				margin: 18px 0 6px;
+			}
+			.lbl.divider {
+				margin-top: 26px;
+			}
+			.serif {
+				font-family: var(--serif);
+				font-weight: 400;
+				color: var(--text);
+				margin: 0;
+				line-height: 1.1;
+			}
+			.serif.ital {
+				font-style: italic;
+				color: var(--text-2);
+			}
+			.sans {
+				font-family: var(--sans);
+				font-weight: 500;
+				color: var(--text);
+				margin: 0;
+				line-height: 1.2;
+			}
+			.sans.w600 {
+				font-weight: 600;
+			}
+			.s-46 {
+				font-size: 46px;
+			}
+			.s-30 {
+				font-size: 30px;
+			}
+			.s-20 {
+				font-size: 20px;
+			}
+			.s-18 {
+				font-size: 18px;
+				margin-bottom: 6px;
+			}
+			.s-16 {
+				font-size: 16px;
+			}
+			.note {
+				font-size: 14.5px;
+				line-height: 1.55;
+				color: var(--text-2);
+				margin: 22px 0 0;
+				max-width: 56ch;
+			}
+
+			.book {
+				display: flex;
+				align-items: center;
+				gap: 14px;
+			}
+			.cover {
+				flex: none;
+				width: 38px;
+				height: 54px;
+				border-radius: 3px;
+				background: linear-gradient(150deg, var(--surface-2), var(--accent-soft));
+				border: 1px solid var(--border);
+			}
+			.book-main {
+				flex: 1;
+			}
+			.book-sub {
+				margin: 2px 0 0;
+				font-size: 13.5px;
+				color: var(--text-2);
+			}
+			.pill {
+				font-family: var(--mono);
+				font-size: 11.5px;
+				letter-spacing: 0.04em;
+				padding: 4px 10px;
+				border-radius: 4px;
+				background: var(--accent);
+				color: var(--accent-ink);
+			}
+		</style>
+	</body>
+</html>

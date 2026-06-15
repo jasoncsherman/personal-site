@@ -21,7 +21,7 @@ Jason's personal website — a content-first "living archive" / personal signal 
 - Dev reference docs: ~/Documents/obsidian-vault/Dev Reference/
 
 ## Information architecture (sections)
-Home · Writing · Photos · AI Log · **Bookshelf** · Projects · Now · About/Collaborate
+Home · Writing · Photos · **Field Notes** (the AI/learning log — renamed from "AI Log", 2026-06-15) · **Bookshelf** · Projects · Now · About/Collaborate
 
 ## After completing any build phase — always do these without being asked
 1. **DAILY-LOG.md** — Add an entry for the session (newest at top, TL;DR + detail sections), dated by when the work happened
