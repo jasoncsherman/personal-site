@@ -6,12 +6,13 @@
 
 :root,
 :root[data-theme="dark"] {
+	color-scheme: dark;
 	--bg: #0d0f13;
 	--surface: #161b22;
 	--surface-2: #20262f;
 	--text: #e8e4da;
 	--text-2: #a6acb6;
-	--muted: #6b7280;
+	--muted: #7e858f;
 	--border: #333b47;
 	--accent: #d2a35a;
 	--accent-soft: #332b1c;
@@ -19,12 +20,13 @@
 }
 
 :root[data-theme="light"] {
+	color-scheme: light;
 	--bg: #f7f6f2;
 	--surface: #efeee8;
 	--surface-2: #e4e3db;
 	--text: #1b1e23;
 	--text-2: #54585f;
-	--muted: #8a8d92;
+	--muted: #6a6e74;
 	--border: #d4d1c7;
 	--accent: #8f6217;
 	--accent-soft: #efe4cf;
@@ -69,6 +71,7 @@ h3 {
 	line-height: 1.1;
 	color: var(--text);
 	margin: 0;
+	text-wrap: balance;
 }
 
 /* Small repeated/list titles use Inter — apply .ui-title where serif is too delicate */

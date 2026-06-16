@@ -1,5 +1,20 @@
 # Personal Site — Build Plan
 
+## Status — last updated 2026-06-16
+
+> This block is the **live status** and is updated each session. Everything below it (Context, Decisions, Phases, Verification, Backlog) is kept **frozen as the historical record** — what we planned and why — so don't rewrite those in place; just update this block.
+
+- **V1 (Phases 0–3): ✅ Built & deployed** at https://www.jasoncsherman.com (custom domain pulled forward from the deferred list). Vercel Web Analytics + Speed Insights in place.
+- **In flight:** Field Notes backfill — 5 draft pilot notes (oldest `DAILY-LOG.md` entries) under review. Once they pass: commit the pilot, then convert the rest of the log oldest-first. Tracked in `FIELD-NOTES-CONVERSION-INDEX.md`.
+- **V1 close-out (remaining):**
+  - Maintenance-workflow proof: add one new book unaided via `HOW-TO-ADD-CONTENT.md` (in progress with Jason).
+  - Footer LinkedIn link is a placeholder `href="#"` — needs Jason's real profile URL (`src/layouts/Layout.astro`).
+  - *(optional perf)* Google Fonts stylesheet is render-blocking (~1.97s est. savings on Home); could async-load or self-host. Deferred unless we want the polish.
+- **Done this session (2026-06-16):**
+  - Field-note IA collision resolved (one concept, one home) — see resolved section below; commit `8d07130`.
+  - Accessibility/UX pass against Web Interface Guidelines + Lighthouse on Home: **A11y 100, Best Practices 96, SEO 100, Performance 91**. Fixed: `color-scheme`, `theme-color`, `text-wrap: balance`, and metadata contrast (`--muted` now ≥4.5:1 in both themes). The two console 404s are Vercel insights scripts (preview-only; fine in prod).
+- **Backlog / V2 (parked, decisions needed):** **Photos** (how to handle images/display — undecided) · Running section · Travel section · public visitor counter · photo auto-import — details in §Future ideas below.
+
 ## Context
 
 Jason is starting his personal website — a portfolio-adjacent project that doubles as a job-search asset. Unlike his data-driven apps (Running Dashboard, Job Leads Tracker), this is a **content-first "living archive"**: a quiet personal signal board showing what he's learning, noticing, making, reading, and thinking about. The vision is captured in detail in his existing design brief (`personal-site-design-brief.md`), written with Codex from a prior conversation, inspired *in philosophy, not appearance* by Conor Luddy's site (https://www.conor.fyi/).
@@ -162,3 +177,9 @@ Captured 2026-06-15. Not committed for any phase yet — parking lot for ideas t
 - **Data source:** `src/content/field-notes/*.md`, using each note's `date` field and filtering out drafts in production once draft filtering is active.
 - **Feasibility:** Easy. No external API or runtime state needed; Astro can compute the grid at build time from local Markdown content. Multiple notes on the same day can increase intensity or show a count in the accessible label.
 - **Open questions:** Where should it live — Field Notes header, About, or Home? Should intensity reflect note count, confidence, or simply presence/absence? What empty-state copy should appear before the backfill is complete?
+
+### 7. Manual book-cover override (for titles Open Library lacks)
+- **What it is:** An optional `cover:` field on bookshelf entries so a book can use a hand-supplied cover image when Open Library has none. Open Library's cover database is volunteer-maintained and patchy — e.g. *A Runner's High* (Dean Karnazes) has no cover in any edition there, so it falls back to the gradient placeholder. (Surfaced 2026-06-16 adding the first self-served book.)
+- **Why deferred / not just use Goodreads:** Goodreads/Amazon have the cover, but Goodreads retired its public API in 2020 and Amazon's catalog API needs an affiliate account + keys — exactly the "secrets to maintain" V1 avoids. So the on-brand fix is a manual override, not a second API.
+- **Sketch:** add optional `cover: string` to the bookshelf schema (a path like `/covers/runners-high.jpg`); the page prefers `cover` when set, else the fetched Open Library cover, else the placeholder. Drop images in `public/covers/` (or `src/assets/` for optimization). Mirrors the existing `title`/`author` override pattern — keep a manual escape hatch for messy external data.
+- **Open questions:** `public/` hotlink vs. `src/assets/` optimized import? Any size/aspect normalization needed so hand-added covers match fetched ones? Worth it now, or only once enough books hit the gap?
