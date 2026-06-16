@@ -22,9 +22,10 @@ const isActive = (href: string) =>
 
 		<nav class="nav" aria-label="Primary">
 			{
-				items.map((it) => (
+				items.map((it, i) => (
 					<a href={it.href} class:list={["nav-link", { active: isActive(it.href) }]} aria-current={isActive(it.href) ? "page" : undefined}>
-						{it.label}
+						<span class="nav-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+						<span>{it.label}</span>
 					</a>
 				))
 			}
@@ -59,9 +60,12 @@ const isActive = (href: string) =>
 	.nav {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 16px;
+		gap: 24px;
 	}
 	.nav-link {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 6px;
 		font-family: var(--font-mono);
 		font-size: 12.5px;
 		letter-spacing: 0.02em;
@@ -70,12 +74,23 @@ const isActive = (href: string) =>
 		border-bottom: 1.5px solid transparent;
 		transition: color 0.15s, border-color 0.15s;
 	}
+	.nav-num {
+		font-size: 10.5px;
+		color: var(--muted);
+		transition: color 0.15s;
+	}
 	.nav-link:hover {
 		color: var(--text);
+	}
+	.nav-link:hover .nav-num {
+		color: var(--text-2);
 	}
 	.nav-link.active {
 		color: var(--accent);
 		border-color: var(--accent);
+	}
+	.nav-link.active .nav-num {
+		color: var(--accent);
 	}
 	.theme-btn {
 		display: inline-grid;
