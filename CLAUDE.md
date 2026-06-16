@@ -13,8 +13,9 @@ Jason's personal website — a content-first "living archive" / personal signal 
 > Note: Astro is a deliberate departure from Jason's usual Next.js stack — chosen because this is a content-first static site where Astro is the right-sized tool (simpler, faster, less to maintain). See `LEARNINGS.md` (Astro vs Next.js).
 
 ## Key locations
-- Live URL: _TBD (Vercel free URL, added at Phase 3 deploy)_
-- GitHub: _TBD (added at first push)_
+- Live URL: https://personal-site-ten-weld-11.vercel.app/ (Vercel, free URL; custom domain deferred)
+- GitHub: https://github.com/jasoncsherman/personal-site (public)
+- Vercel: project `personal-site`, auto-deploys from GitHub `main` on every push. **No env vars / secrets** (Open Library is keyless) — nothing to sync.
 - Project plan: `PLAN.md` (in this folder)
 - Design brief: `personal-site-design-brief.md` (in this folder)
 - **How to add content: `HOW-TO-ADD-CONTENT.md`** (front-matter reference + a copy-paste spec for the blog-writing agent)
