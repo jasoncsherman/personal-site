@@ -1,6 +1,12 @@
 // Build-time book metadata from Open Library (no key, no auth).
-// Fetches title/author/year/pages/cover by ISBN, with an on-disk cache so
-// repeated builds don't re-hit the API. Runs only at build — never in the browser.
+// Fetches title/author/year/pages/cover by ISBN, then stores the result in a
+// COMMITTED data file (src/lib/openlibrary-data.json) that is the source of
+// truth for production builds. Vercel's build network can't reach
+// openlibrary.org (connect timeout), so prod must NOT depend on a live fetch —
+// it reads the committed data instead. The fetch only runs locally to fill in
+// ISBNs not yet in the file; after adding a book, build/preview locally to
+// populate it, then commit the updated openlibrary-data.json alongside the .md.
+// Runs only at build — never in the browser.
 
 import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -13,8 +19,8 @@ export interface BookMeta {
 	coverUrl?: string;
 }
 
-const CACHE_DIR = ".cache";
-const CACHE_FILE = `${CACHE_DIR}/openlibrary.json`;
+const CACHE_DIR = "src/lib";
+const CACHE_FILE = `${CACHE_DIR}/openlibrary-data.json`;
 
 async function loadCache(): Promise<Record<string, BookMeta>> {
 	try {
@@ -38,7 +44,7 @@ async function saveCache(cache: Record<string, BookMeta>): Promise<void> {
 
 /**
  * Returns a map of ISBN -> metadata. Cached misses (empty objects) are kept so
- * we don't refetch every build; delete .cache/openlibrary.json to force a refresh.
+ * we don't refetch every build; delete src/lib/openlibrary-data.json to force a refresh.
  */
 export async function getBooksMeta(isbns: string[]): Promise<Record<string, BookMeta>> {
 	const cache = await loadCache();
