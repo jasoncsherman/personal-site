@@ -111,3 +111,31 @@ New stack ⇒ document as we go:
 - Custom domain (attach later).
 - Importing books/photos from external services (Goodreads/StoryGraph, etc.) — API keys/maintenance; revisit in V2 once the site proves it earns upkeep.
 - CMS, auth, database, analytics, comments, newsletter (per brief).
+
+## Future section / feature ideas (backlog)
+
+Captured 2026-06-15. Not committed for any phase yet — parking lot for ideas to flesh out and prioritize later. Each note records what it is, where the data would come from, feasibility, and open questions.
+
+### 1. Running section
+- **What it is:** A section surfacing Jason's running — could be a lightweight "recently ran" feed, summary stats (weekly/monthly mileage, pace trends), or a few highlighted routes/races with a short "why it mattered" note in the same reflective voice as the rest of the site.
+- **Data source:** Strava. There's already a connected Strava integration available in this workspace (athlete profile, activity list, per-activity stats/streams, gear, zones), and Jason has a separate "Running Dashboard" app — so the data plumbing is a known quantity.
+- **Feasibility:** Medium. The tension is the site's content-first, no-database, no-API-keys principle (see Decisions + Deferred). Two honest options: **(a) static snapshot** — periodically pull from Strava and commit a small Markdown/JSON file of recent runs (stays true to the static, no-secrets model; manual or scripted refresh); **(b) live fetch** — call Strava at build time or runtime, which reintroduces an API token + maintenance, the exact thing V1 deliberately avoided. Lean (a) for V1-style purity.
+- **Open questions:** How much is enough — a single "Now"-style line ("running ~20mi/week, training for X") vs a full stats section? Does this overlap with the Running Dashboard app (link out to it instead of rebuilding)? How fresh does it need to be — does a monthly committed snapshot feel honest, or stale?
+
+### 2. Travel section
+- **What it is:** A place section for trips — could be a map, a list of places with dates and a short reflection each, or photo-led entries. Note the brief already imagines Photos albums like "Places / Travel," so this may be a **facet of Photos rather than a standalone section** — worth deciding which.
+- **Data source:** Manual, Markdown-first (consistent with the rest of the site). Optionally a coordinates field per entry if a map is wanted.
+- **Feasibility:** Easy as a content collection (new `travel` collection or a `theme: travel` tag on Photos). A map adds scope: a static styled map image is cheap; an interactive map (Leaflet/MapLibre) is more JS + a tile source to maintain — counter to the lean-static ethos. Could start mapless and add one later.
+- **Open questions:** Standalone section, or a Travel view/tag inside Photos? Map or no map for V1? Organize by trip, by place, or chronologically? Privacy — comfortable publishing locations/dates, and any to keep vague?
+
+### Open IA question: "field note" means two things
+- **The problem:** "Field note" is currently doing two unrelated jobs. It's (a) the name of a whole section — **Field Notes**, which is the renamed AI/learning log (schema: `tool`, `mode`, `confidence`, `keyLesson`; a dated record of the learning *process*) — and also (b) one of the `type` values in the **Writing** collection's enum (`Note | Essay | Reflection | Field note`). One Writing entry, `tools-that-earn-their-keep.md`, is tagged `type: "Field note"`, so it reads as the same thing as the Field Notes section but lives under Writing.
+- **Intended distinction:** Writing = outward-facing thinking (essays/notes/reflections about ideas and tools); Field Notes = inward-facing process (dated log of learning/building, especially the AI work). The collision blurs that line.
+- **Options to resolve (deferred — explained 2026-06-15, no change made yet):** (a) reserve "Field Notes" for the learning log only — drop "Field note" from the Writing `type` enum and retag that one entry as `Note`/`Reflection`; or (b) keep "field note" as a Writing type and rename the log section to something distinct (e.g. "Learning Log", "Workshop", "Lab").
+- **Status:** Parked. Nothing broken; the one seam entry just reads ambiguously until a direction is picked.
+
+### 3. GitHub contribution heatmap
+- **What it is:** The familiar calendar-grid "contribution graph" (the green squares) embedded on the site — likely on Home or About — as a quiet signal of consistent building.
+- **Data source:** GitHub. The public contribution data for `jasoncsherman` can be rendered without auth via a few routes: a third-party SVG/image service (zero-maintenance, but an external dependency + their styling), or a build-time fetch of the contributions and self-render to match the site's palette (more control, fits the design system, slightly more code).
+- **Feasibility:** Easy–medium. Static SVG embed is trivial. Self-rendered-to-match-theme is the nicer-looking, on-brand option and still modest. Either avoids a runtime secret (public data).
+- **Open questions:** Where does it live — Home, About, or a Projects header? Match the chosen site palette (recommended) or accept an off-the-shelf green grid? Refresh cadence — build-time only (updates on each deploy) good enough, or does it need to feel live? Does a code-activity graph fit the site's anti-resume, "living archive" tone, or read too much like a dev portfolio (the one thing the brief steers away from)?
