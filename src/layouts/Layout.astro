@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Nav from "../components/Nav.astro";
+import Analytics from "@vercel/analytics/astro";
 
 interface Props {
 	title?: string;
@@ -59,6 +60,8 @@ const year = new Date().getFullYear();
 				<p class="foot-meta meta">© {year} · built with Astro</p>
 			</div>
 		</footer>
+
+		<Analytics />
 
 		<style>
 			main {
