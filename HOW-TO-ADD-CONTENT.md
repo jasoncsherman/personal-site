@@ -47,7 +47,9 @@ You can paste the block below directly to the other agent that's turning your da
 >
 > **Front matter** (between the `---` lines at the very top):
 > - `title:` (required) — the post title, in quotes.
-> - `type:` — one of `Note`, `Essay`, `Reflection`, `Field note`. Default `Note`.
+> - `type:` — one of `Note`, `Essay`, `Reflection`. Default `Note`. (Short
+>   AI/learning entries are **field notes** — a separate section with its own
+>   spec below, not a `type` here.)
 > - `topic:` (optional) — a short subject tag, e.g. `"Learning"`, `"Systems"`.
 > - `published:` (required) — the date the work/events happened (NOT the day it
 >   was rewritten), format `YYYY-MM-DD`, e.g. `2026-06-12`.
@@ -87,13 +89,101 @@ pressure of an audience. That pressure is the point.
 
 ---
 
+## ⭐ For the field-notes agent (hand this over)
+
+Field Notes are the AI/learning log. Each note renders in three parts, top to bottom: a **metadata line** (date · tool · mode · confidence), the **note body**, and a one-line **Lesson** at the end. Paste the block below to the agent that turns your learning moments into field notes.
+
+> **Where to save:** Each field note is a separate Markdown file in
+> `/Users/jasoncsherman/Documents/obsidian-vault/personal-site/src/content/field-notes/`
+>
+> **Filename:** kebab-case of the title, ending in `.md` — e.g. a note titled
+> "Typed content with collections" → `content-collections.md`. This becomes the
+> URL `/field-notes/content-collections/`. Keep filenames unique.
+>
+> **Front matter** (between the `---` lines at the very top):
+> - `title:` (required) — the note title, in quotes.
+> - `date:` (required) — the date the learning happened (NOT the day it was
+>   written up), format `YYYY-MM-DD`. Notes sort newest first.
+> - `tool:` (optional) — the tool/tech it's about, in quotes, e.g. `"Astro"`,
+>   `"Claude Code"`. Shown in the metadata line.
+> - `mode:` (optional) — one of `learning`, `workflow`, `reflection`,
+>   `experiment`. Default `learning`. Pick the one that fits: `learning` =
+>   grasping a new concept; `workflow` = a way of working; `reflection` = a
+>   change in thinking/taste; `experiment` = tried something to see what happens.
+> - `confidence:` (optional) — one of `low`, `growing`, `solid`. How sure you
+>   are you've actually internalized it.
+> - `keyLesson:` (optional but encouraged) — the ONE-LINE takeaway, in quotes.
+>   This is the "Lesson" line at the bottom of the note. Keep it to a single
+>   plain sentence — a portable rule of thumb, not a summary of the note.
+> - `status:` — `published` or `draft`. Default `published`. Set generated/
+>   unreviewed notes to `draft`; drafts are visible in `npm run dev` but hidden
+>   from the live site until flipped to `published`.
+>
+> **Body:** the note itself in Markdown below the closing `---`. Keep it short
+> and human — a paragraph or two, first-person, what you tried and what changed.
+> This is a personal log, not documentation.
+>
+> **Rules:** Don't invent facts, tools, or events — base each note only on what
+> actually happened. Date by when the learning happened. One note per file. The
+> `keyLesson` must be a genuine takeaway from the body, not a restatement of the
+> title.
+
+> **Daily Log backfill workflow:** When converting entries from
+> `/Users/jasoncsherman/Documents/obsidian-vault/Dev Reference/DAILY-LOG.md`,
+> treat this field-note spec as the source of truth. Start with a small pilot
+> before converting the whole archive; for the initial pilot, use the oldest five
+> entries from the bottom of the daily log and work upward. Preserve technical
+> and learning details, but omit or generalize private names, job-search details,
+> emotional context that is too raw for the public site, credentials, secrets,
+> and internal Obsidian links. Generated notes should default to `status: "draft"`
+> until reviewed.
+>
+> **Conversion index:** Maintain a non-content index at the project root:
+> `/Users/jasoncsherman/Documents/obsidian-vault/personal-site/FIELD-NOTES-CONVERSION-INDEX.md`.
+> Track each source entry as it is converted so future agents can resume safely.
+> Suggested columns: `Source date`, `Note date`, `Title`, `Filename`, `Tool`,
+> `Mode`, `Confidence`, `Status`, `Key lesson`, `Notes`. Do not put the index
+> inside `src/content/field-notes/`, because that folder is for public note files.
+
+### Example field-note file
+
+`src/content/field-notes/content-collections.md`:
+```markdown
+---
+title: "Typed content with collections"
+date: 2026-06-15
+tool: "Astro content collections"
+mode: "experiment"
+confidence: "growing"
+keyLesson: "Let the schema catch your typos."
+---
+
+Moved the bookshelf to typed Markdown files with a schema. A bad value (say, a
+status that isn't in the allowed list) now fails the build loudly instead of
+silently breaking a page — surprisingly reassuring.
+```
+
+This renders as:
+
+```
+2026·06·15 · Astro content collections · experiment · growing confidence
+
+Typed content with collections
+Moved the bookshelf to typed Markdown files with a schema. A bad value now
+fails the build loudly instead of silently breaking a page…
+
+Lesson  Let the schema catch your typos.
+```
+
+---
+
 ## Full front-matter reference (every collection)
 
 ### Writing — `src/content/writing/`
 | Field | Required? | Values / format |
 |---|---|---|
 | `title` | ✅ | text in quotes |
-| `type` | – | `Note` · `Essay` · `Reflection` · `Field note` (default `Note`) |
+| `type` | – | `Note` · `Essay` · `Reflection` (default `Note`) |
 | `topic` | – | short text |
 | `published` | ✅ | `YYYY-MM-DD` |
 | `updated` | – | `YYYY-MM-DD` |
@@ -138,7 +228,8 @@ Body = a short description (optional).
 | `tool` | – | e.g. `"Astro"`, `"Claude Code"` |
 | `mode` | – | `learning` · `workflow` · `reflection` · `experiment` (default `learning`) |
 | `confidence` | – | `low` · `growing` · `solid` |
-| `keyLesson` | – | one-line takeaway |
+| `keyLesson` | – | one-line takeaway (renders as the "Lesson" line) |
+| `status` | – | `published` · `draft` (default `published`; drafts hidden from the live site) |
 
 Body = the note itself.
 

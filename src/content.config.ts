@@ -22,7 +22,7 @@ const writing = defineCollection({
 	loader: glob({ pattern: "**/*.md", base: "./src/content/writing" }),
 	schema: z.object({
 		title: z.string(),
-		type: z.enum(["Note", "Essay", "Reflection", "Field note"]).default("Note"),
+		type: z.enum(["Note", "Essay", "Reflection"]).default("Note"),
 		topic: z.string().optional(),
 		published: z.coerce.date(),
 		updated: z.coerce.date().optional(),
@@ -55,6 +55,7 @@ const fieldNotes = defineCollection({
 		mode: z.enum(["learning", "workflow", "reflection", "experiment"]).default("learning"),
 		confidence: z.enum(["low", "growing", "solid"]).optional(),
 		keyLesson: z.string().optional(),
+		status: z.enum(["draft", "published"]).default("published"),
 	}),
 });
 

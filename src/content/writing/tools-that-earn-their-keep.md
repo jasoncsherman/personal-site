@@ -1,6 +1,6 @@
 ---
 title: "The tools that earn their keep"
-type: "Field note"
+type: "Reflection"
 topic: "Systems"
 published: 2026-05-28
 status: "published"
